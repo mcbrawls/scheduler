@@ -8,12 +8,8 @@ import kotlin.test.Test
 object SchedulerTest {
     private val milliTime: Long get() = System.currentTimeMillis()
 
-    @JvmStatic
-    fun main(args: Array<String>) {
-    }
-
     @Test
-    fun scheduleTaskFor3Seconds() {
+    fun scheduleTaskWithAbsoluteSchedulerFor3SecondsWithProcessDelay() {
         var passed = false
 
         // schedule
@@ -25,12 +21,22 @@ object SchedulerTest {
 
         // wait for schedule and tick
         val timeMs = milliTime
-        while (milliTime - timeMs < 5 * 1000) {
-            scheduler.processTick()
+        while (true) {
+            val delta = milliTime - timeMs
 
-            if (passed) {
-                println("Passed!")
+            // timeout at 5s
+            if (delta >= 5 * 1000) {
                 break
+            }
+
+            // only process scheduler tick after 2 seconds
+            if (delta > 2 * 1000) {
+                scheduler.processTick()
+
+                if (passed) {
+                    println("Passed!")
+                    break
+                }
             }
         }
 
