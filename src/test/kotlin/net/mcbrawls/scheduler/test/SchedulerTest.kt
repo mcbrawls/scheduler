@@ -3,6 +3,7 @@ package net.mcbrawls.scheduler.test
 import net.mcbrawls.scheduler.AbsoluteScheduler
 import java.time.Duration
 import kotlin.math.abs
+import kotlin.math.min
 import kotlin.test.Test
 
 object SchedulerTest {
@@ -43,7 +44,8 @@ object SchedulerTest {
         // assert
         val deltaTimeMs = milliTime - timeMs
         val percentageDiff = abs(deltaTimeMs - expectedMillis) / ((deltaTimeMs + expectedMillis) / 2.0) * 100
-        val roundedPercentageDiff = percentageDiff.toString().substring(0, 5)
+        val percentageDiffString = percentageDiff.toString()
+        val roundedPercentageDiff = percentageDiffString.substring(0, min(5, percentageDiffString.length))
 
         println("Delta time $deltaTimeMs ms, expected time $expectedMillis, diff $roundedPercentageDiff%")
         assert(percentageDiff < 0.1)
