@@ -19,6 +19,8 @@ object SchedulerTest {
         // schedule
         val scheduler = AbsoluteScheduler()
         val expectedMillis = 3 * 1000L
+
+        println("Scheduling pass")
         scheduler.schedule({ passed = true }, Duration.ofMillis(expectedMillis))
 
         // wait for schedule and tick
@@ -27,15 +29,17 @@ object SchedulerTest {
             scheduler.processTick()
 
             if (passed) {
+                println("Passed!")
                 break
             }
         }
 
         // assert
         val deltaTimeMs = milliTime - timeMs
-        val percentageDiff = (abs(deltaTimeMs - expectedMillis) / ((deltaTimeMs + expectedMillis) / 2.0)) * 100
+        val percentageDiff = abs(deltaTimeMs - expectedMillis) / ((deltaTimeMs + expectedMillis) / 2.0) * 100
+        val roundedPercentageDiff = percentageDiff.toString().substring(0, 5)
 
-        println("Delta time $deltaTimeMs ms, expected time $expectedMillis, diff $percentageDiff%")
+        println("Delta time $deltaTimeMs ms, expected time $expectedMillis, diff $roundedPercentageDiff%")
         assert(percentageDiff < 0.1)
     }
 }
