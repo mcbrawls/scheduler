@@ -1,5 +1,6 @@
 package net.mcbrawls.scheduler
 
+import net.mcbrawls.scheduler.task.ExecutionType
 import net.mcbrawls.scheduler.task.ScheduledTask
 import net.mcbrawls.scheduler.task.Task
 import java.time.Duration
@@ -19,6 +20,10 @@ interface Schedulable : Scheduler {
 
     override fun schedule(task: Task, delay: Duration, repeatDelay: Duration?): ScheduledTask {
         return scheduler.schedule(task, delay, repeatDelay)
+    }
+
+    override fun schedule(runnable: Runnable, delay: Duration, repeatDelay: Duration?, executionType: ExecutionType): ScheduledTask {
+        return scheduler.schedule(runnable, delay, repeatDelay, executionType)
     }
 
     override fun cancel(task: ScheduledTask): Boolean {
