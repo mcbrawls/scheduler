@@ -39,7 +39,10 @@ interface Scheduler {
          * How the task should be executed.
          */
         executionType: ExecutionType = ExecutionType.SYNC
-    ): ScheduledTask
+    ): ScheduledTask {
+        val task = Task(runnable, delay, executionType)
+        return schedule(task)
+    }
 
     /**
      * Cancels the given task.

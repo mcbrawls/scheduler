@@ -2,17 +2,26 @@ package net.mcbrawls.scheduler
 
 import net.mcbrawls.scheduler.task.ScheduledTask
 import net.mcbrawls.scheduler.task.Task
+import java.time.Duration
 
 /**
- * A scheduler which performs in relation to absolute time.
- * The scheduler will calculate the time taken between ticks and perform tasks respectively.
+ * A scheduler which performs in relation to a local tick variable.
  */
-class AbsoluteScheduler : Scheduler {
+class RelativeScheduler(
+    /**
+     * The amount of time which is simulated per tick.
+     */
+    durationPerTick: Duration
+) : Scheduler {
     private val tasks: MutableList<ScheduledTask> = mutableListOf()
+
+    private val nanosPerTick = durationPerTick.toNanos()
+
+    private var tickNanos: Long = 0L
 
     override fun processTick() {
         // get tasks to perform
-        val predicate = ScheduledTask.shouldPerformPredicate(nanoTime)
+        val predicate = ScheduledTask.shouldPerformPredicate(tickNanos)
         val tasksToPerform = tasks.filter(predicate)
 
         // perform
@@ -23,22 +32,18 @@ class AbsoluteScheduler : Scheduler {
             // remove all tasks
             tasks.removeAll(tasksToPerform)
         }
+
+        // increment tick
+        tickNanos += nanosPerTick
     }
 
     override fun schedule(task: Task): ScheduledTask {
-        val scheduledTask = ScheduledTask(task, nanoTime, this)
+        val scheduledTask = ScheduledTask(task, tickNanos, this)
         tasks.add(scheduledTask)
         return scheduledTask
     }
 
     override fun cancel(task: ScheduledTask): Boolean {
         return tasks.remove(task)
-    }
-
-    companion object {
-        /**
-         * Provides the current time in nanoseconds.
-         */
-        private val nanoTime: Long get() = System.nanoTime()
     }
 }

@@ -1,16 +1,17 @@
 package net.mcbrawls.scheduler.test
 
 import net.mcbrawls.scheduler.AbsoluteScheduler
-import java.time.Duration
+import net.mcbrawls.scheduler.duration.TickDuration
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 object SchedulerTest {
     private val milliTime: Long get() = System.currentTimeMillis()
 
     @Test
-    fun scheduleTaskWithAbsoluteSchedulerFor3SecondsWithProcessDelay() {
+    fun scheduleTaskWithAbsoluteSchedulerFor60TicksWithProcessDelay() {
         var passed = false
 
         // schedule
@@ -18,7 +19,7 @@ object SchedulerTest {
         val expectedMillis = 3 * 1000L
 
         println("Scheduling pass")
-        scheduler.schedule({ passed = true }, Duration.ofMillis(expectedMillis))
+        scheduler.schedule({ passed = true }, TickDuration.create(60))
 
         // wait for schedule and tick
         val timeMs = milliTime
@@ -49,5 +50,12 @@ object SchedulerTest {
 
         println("Delta time $deltaTimeMs ms, expected time $expectedMillis, diff $roundedPercentageDiff%")
         assert(percentageDiff < 0.1)
+    }
+
+    @Test
+    fun tickDurationConversion() {
+        val expected = 50L
+        val tickDuration = TickDuration.create(expected)
+        assertEquals(TickDuration.getTicks(tickDuration), expected)
     }
 }
