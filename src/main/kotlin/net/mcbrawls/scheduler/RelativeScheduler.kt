@@ -1,5 +1,6 @@
 package net.mcbrawls.scheduler
 
+import net.mcbrawls.scheduler.duration.TickDuration
 import net.mcbrawls.scheduler.task.ScheduledTask
 import net.mcbrawls.scheduler.task.Task
 import java.time.Duration
@@ -11,7 +12,7 @@ class RelativeScheduler(
     /**
      * The amount of time which is simulated per tick.
      */
-    durationPerTick: Duration
+    durationPerTick: Duration = TickDuration.create(1)
 ) : Scheduler {
     private val tasks: MutableList<ScheduledTask> = mutableListOf()
 
