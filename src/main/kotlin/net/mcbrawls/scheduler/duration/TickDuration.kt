@@ -44,4 +44,17 @@ object TickDuration {
         val nanosPerTick = 1_000_000_000L / ticksPerSecond
         return nanos / nanosPerTick
     }
+
+    /**
+     * Creates a tick duration for a single tick.
+     * @return a duration
+     */
+    fun nextTick(
+        /**
+         * The amount of ticks which comprise a second.
+         */
+        ticksPerSecond: Long = 20
+    ): Duration {
+        return create(1, ticksPerSecond)
+    }
 }
