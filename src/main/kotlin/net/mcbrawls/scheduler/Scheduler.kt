@@ -18,7 +18,7 @@ interface Scheduler {
      * Schedules a task.
      * @return the scheduled task
      */
-    fun schedule(task: Task): ScheduledTask
+    fun schedule(task: Task, delay: Duration, repeatDelay: Duration? = null): ScheduledTask
 
     /**
      * Schedules a task from the given arguments.
@@ -36,13 +36,15 @@ interface Scheduler {
         delay: Duration,
 
         /**
+         * The delay until the task repeats.
+         */
+        repeatDelay: Duration? = null,
+
+        /**
          * How the task should be executed.
          */
         executionType: ExecutionType = ExecutionType.SYNC
-    ): ScheduledTask {
-        val task = Task(runnable, delay, executionType)
-        return schedule(task)
-    }
+    ): ScheduledTask
 
     /**
      * Cancels the given task.

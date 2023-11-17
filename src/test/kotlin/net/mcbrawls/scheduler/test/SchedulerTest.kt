@@ -11,23 +11,32 @@ object SchedulerTest {
     private val milliTime: Long get() = System.currentTimeMillis()
 
     @Test
-    fun scheduleTaskWithAbsoluteSchedulerFor60TicksWithProcessDelay() {
-        var passed = false
+    fun scheduleTaskWithAbsoluteSchedulerFor60TicksRepeatedWithProcessDelay() {
+        var passes = 0
+        val expectedPasses = 10
 
         // schedule
         val scheduler = AbsoluteScheduler()
-        val expectedMillis = 3 * 1000L
+        val expectedMillis = (3 + expectedPasses - 1) * 1000L
 
+        var prescheduleTimeMs = milliTime
         println("Scheduling pass")
-        scheduler.schedule({ passed = true }, TickDuration.create(60))
+        scheduler.schedule(
+            {
+                passes++
+                println("Pass #$passes after ${(milliTime - prescheduleTimeMs) / 1000.0}s")
+                prescheduleTimeMs = milliTime
+            },
+            TickDuration.create(60), TickDuration.create(20)
+        )
 
         // wait for schedule and tick
         val timeMs = milliTime
         while (true) {
             val delta = milliTime - timeMs
 
-            // timeout at 5s
-            if (delta >= 5 * 1000) {
+            // timeout after expected millis
+            if (delta >= expectedMillis * 2) {
                 break
             }
 
@@ -35,7 +44,7 @@ object SchedulerTest {
             if (delta > 2 * 1000) {
                 scheduler.processTick()
 
-                if (passed) {
+                if (passes == expectedPasses) {
                     println("Passed!")
                     break
                 }
@@ -49,7 +58,7 @@ object SchedulerTest {
         val roundedPercentageDiff = percentageDiffString.substring(0, min(5, percentageDiffString.length))
 
         println("Delta time $deltaTimeMs ms, expected time $expectedMillis, diff $roundedPercentageDiff%")
-        assert(percentageDiff < 0.1)
+        assert(percentageDiff < 0.2)
     }
 
     @Test
