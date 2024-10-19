@@ -7,55 +7,16 @@ import kotlin.time.Duration.Companion.nanoseconds
  * Game tick duration utilities.
  */
 object TickDuration {
-    /**
-     * Creates a duration from ticks and ticks per second.
-     * @return a duration
-     */
-    fun create(
-        /**
-         * The amount of ticks within the duration.
-         */
-        ticks: Long,
-
-        /**
-         * The amount of ticks which comprise a second.
-         */
-        ticksPerSecond: Long = 20
-    ): Duration {
-        val nanosPerTick = 1_000_000_000L / ticksPerSecond
-        return (nanosPerTick * ticks).nanoseconds
-    }
+    const val NANOS_PER_TICK = 1_000_000_000L / 20
 
     /**
-     * Calculates the ticks of the given duration.
-     * @return a quantity of ticks
+     * A tick duration for a single tick.
      */
-    fun getTicks(
-        /**
-         * The duration to get timings from.
-         */
-        duration: Duration,
+    val NEXT_TICK = NANOS_PER_TICK.nanoseconds
 
-        /**
-         * The amount of ticks which comprise a second.
-         */
-        ticksPerSecond: Long = 20
-    ): Long {
-        val nanos = duration.inWholeNanoseconds
-        val nanosPerTick = 1_000_000_000L / ticksPerSecond
-        return nanos / nanosPerTick
-    }
+    inline val Int.ticks get() = toLong().ticks
+    inline val Long.ticks get() = (this * NANOS_PER_TICK).nanoseconds
+    inline val Double.ticks get() = toLong().ticks
 
-    /**
-     * Creates a tick duration for a single tick.
-     * @return a duration
-     */
-    fun nextTick(
-        /**
-         * The amount of ticks which comprise a second.
-         */
-        ticksPerSecond: Long = 20
-    ): Duration {
-        return create(1, ticksPerSecond)
-    }
+    inline val Duration.inWholeTicks get() = inWholeNanoseconds / NANOS_PER_TICK
 }

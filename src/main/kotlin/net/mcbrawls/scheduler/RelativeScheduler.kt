@@ -1,20 +1,12 @@
 package net.mcbrawls.scheduler
 
 import net.mcbrawls.scheduler.duration.TickDuration
-import kotlin.time.Duration
 
 /**
  * A scheduler which performs in relation to a local tick variable.
  */
-class RelativeScheduler(
-    /**
-     * The amount of time which is simulated per tick.
-     */
-    durationPerTick: Duration = TickDuration.create(1)
-) : AbstractScheduler() {
+class RelativeScheduler : AbstractScheduler() {
     override val currentTimeNanos: Long get() = tickNanos
-
-    private val nanosPerTick = durationPerTick.inWholeNanoseconds
 
     private var tickNanos: Long = 0L
 
@@ -22,6 +14,6 @@ class RelativeScheduler(
         super.processTick()
 
         // increment tick
-        tickNanos += nanosPerTick
+        tickNanos += TickDuration.NANOS_PER_TICK
     }
 }

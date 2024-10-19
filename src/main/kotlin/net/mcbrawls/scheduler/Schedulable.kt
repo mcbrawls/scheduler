@@ -22,8 +22,8 @@ interface Schedulable : Scheduler {
         return scheduler.schedule(task, delay, repeatDelay)
     }
 
-    override fun schedule(runnable: Runnable, delay: Duration, repeatDelay: Duration?, executionType: ExecutionType): ScheduledTask {
-        return scheduler.schedule(runnable, delay, repeatDelay, executionType)
+    override fun schedule(delay: Duration, repeatDelay: Duration?, executionType: ExecutionType, runnable: Runnable): ScheduledTask {
+        return scheduler.schedule(delay, repeatDelay, executionType, runnable)
     }
 
     override fun cancel(task: ScheduledTask): Boolean {

@@ -1,7 +1,8 @@
 package net.mcbrawls.scheduler.test
 
 import net.mcbrawls.scheduler.AbsoluteScheduler
-import net.mcbrawls.scheduler.duration.TickDuration
+import net.mcbrawls.scheduler.duration.TickDuration.inWholeTicks
+import net.mcbrawls.scheduler.duration.TickDuration.ticks
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.test.Test
@@ -22,13 +23,13 @@ object SchedulerTest {
         var prescheduleTimeMs = milliTime
         println("Scheduling pass")
         scheduler.schedule(
-            {
-                passes++
-                println("Pass #$passes after ${(milliTime - prescheduleTimeMs) / 1000.0}s")
-                prescheduleTimeMs = milliTime
-            },
-            TickDuration.create(60), TickDuration.create(20)
-        )
+            60.ticks,
+            20.ticks,
+        ) {
+            passes++
+            println("Pass #$passes after ${(milliTime - prescheduleTimeMs) / 1000.0}s")
+            prescheduleTimeMs = milliTime
+        }
 
         // wait for schedule and tick
         val timeMs = milliTime
@@ -64,7 +65,7 @@ object SchedulerTest {
     @Test
     fun tickDurationConversion() {
         val expected = 50L
-        val tickDuration = TickDuration.create(expected)
-        assertEquals(TickDuration.getTicks(tickDuration), expected)
+        val tickDuration = expected.ticks
+        assertEquals(tickDuration.inWholeTicks, expected)
     }
 }

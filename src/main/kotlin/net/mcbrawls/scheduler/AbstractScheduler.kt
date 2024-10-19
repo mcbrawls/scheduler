@@ -51,7 +51,7 @@ abstract class AbstractScheduler : Scheduler, Schedulable {
         return scheduledTask
     }
 
-    override fun schedule(runnable: Runnable, delay: Duration, repeatDelay: Duration?, executionType: ExecutionType): ScheduledTask {
+    override fun schedule(delay: Duration, repeatDelay: Duration?, executionType: ExecutionType, runnable: Runnable): ScheduledTask {
         val task = Task(runnable, executionType)
         return schedule(task, delay, repeatDelay)
     }

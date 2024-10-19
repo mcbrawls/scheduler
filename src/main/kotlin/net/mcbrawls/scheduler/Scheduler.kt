@@ -25,10 +25,6 @@ interface Scheduler {
      * @return the scheduled task
      */
     fun schedule(
-        /**
-         * The function of the task.
-         */
-        runnable: Runnable,
 
         /**
          * The delay until the task is performed.
@@ -43,7 +39,12 @@ interface Scheduler {
         /**
          * How the task should be executed.
          */
-        executionType: ExecutionType = ExecutionType.SYNC
+        executionType: ExecutionType = ExecutionType.SYNC,
+
+        /**
+         * The function of the task.
+         */
+        runnable: Runnable,
     ): ScheduledTask
 
     /**
