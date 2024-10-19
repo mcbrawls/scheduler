@@ -1,6 +1,7 @@
 package net.mcbrawls.scheduler.duration
 
-import java.time.Duration
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.nanoseconds
 
 /**
  * Game tick duration utilities.
@@ -22,7 +23,7 @@ object TickDuration {
         ticksPerSecond: Long = 20
     ): Duration {
         val nanosPerTick = 1_000_000_000L / ticksPerSecond
-        return Duration.ofNanos(nanosPerTick * ticks)
+        return (nanosPerTick * ticks).nanoseconds
     }
 
     /**
@@ -40,7 +41,7 @@ object TickDuration {
          */
         ticksPerSecond: Long = 20
     ): Long {
-        val nanos = duration.toNanos()
+        val nanos = duration.inWholeNanoseconds
         val nanosPerTick = 1_000_000_000L / ticksPerSecond
         return nanos / nanosPerTick
     }

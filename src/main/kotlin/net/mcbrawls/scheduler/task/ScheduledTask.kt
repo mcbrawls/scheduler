@@ -1,7 +1,7 @@
 package net.mcbrawls.scheduler.task
 
 import net.mcbrawls.scheduler.Scheduler
-import java.time.Duration
+import kotlin.time.Duration
 
 /**
  * Represents a task after being scheduled.
@@ -63,7 +63,7 @@ data class ScheduledTask(
          * @return a predicate of a scheduled task
          */
         fun shouldPerformPredicate(currentTime: Long): (ScheduledTask) -> Boolean {
-            return { task -> currentTime - task.scheduledAtNanos >= task.delay.toNanos() }
+            return { task -> currentTime - task.scheduledAtNanos >= task.delay.inWholeNanoseconds }
         }
     }
 }

@@ -3,7 +3,7 @@ package net.mcbrawls.scheduler
 import net.mcbrawls.scheduler.task.ExecutionType
 import net.mcbrawls.scheduler.task.ScheduledTask
 import net.mcbrawls.scheduler.task.Task
-import java.time.Duration
+import kotlin.time.Duration
 
 /**
  * The default implementatiojn of a scheduler.

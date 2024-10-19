@@ -1,7 +1,7 @@
 package net.mcbrawls.scheduler
 
 import net.mcbrawls.scheduler.duration.TickDuration
-import java.time.Duration
+import kotlin.time.Duration
 
 /**
  * A scheduler which performs in relation to a local tick variable.
@@ -14,7 +14,7 @@ class RelativeScheduler(
 ) : AbstractScheduler() {
     override val currentTimeNanos: Long get() = tickNanos
 
-    private val nanosPerTick = durationPerTick.toNanos()
+    private val nanosPerTick = durationPerTick.inWholeNanoseconds
 
     private var tickNanos: Long = 0L
 
